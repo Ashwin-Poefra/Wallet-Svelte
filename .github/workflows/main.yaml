@@ -7,24 +7,22 @@ on:
   workflow_dispatch:
     inputs:
       logLevel:
-        description: 'Log level'
+        description: "Log level"
         required: true
-        default: 'warning'
+        default: "warning"
         type: choice
         options:
-        - info
-        - warning
-        - debug
+          - info
+          - warning
+          - debug
       tags:
-        description: 'Test scenario tags'
+        description: "Test scenario tags"
         required: false
         type: boolean
-    
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v2
@@ -43,14 +41,14 @@ jobs:
         run: npm run build
 
       - name: cdk deploy
-        working-directory: ./infrastructure
         uses: youyo/aws-cdk-github-actions@v2
         with:
-          cdk_subcommand: 'deploy'
-          cdk_stack: '*'
-          cdk_args: '--require-approval never'
+          cdk_subcommand: "deploy"
+          cdk_stack: "*"
+          cdk_args: "--require-approval never"
           actions_comment: false
+          working_dir: './infrastructure'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+          AWS_DEFAULT_REGION: "us-east-1"
