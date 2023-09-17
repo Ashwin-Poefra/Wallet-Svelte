@@ -38,8 +38,9 @@
 	onMount(async () => {
 		try {
 			const response = await axios.get(`${PAYMENTS_API_BASE_URL}/publickey`, {
+				withCredentials: false,
 				headers: {
-					Authorization: `Bearer ${localStorage.getItem('access_token')}`
+					authorization: `Bearer ${localStorage.getItem('access_token')}`
 				}
 			});
 
@@ -123,7 +124,7 @@
 					{ encrypted_payload: encrypted },
 					{
 						headers: {
-							Authorization: `Bearer ${localStorage.getItem('access_token')}`
+							authorization: `Bearer ${localStorage.getItem('access_token')}`
 						}
 					}
 				);
