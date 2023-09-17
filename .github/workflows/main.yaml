@@ -1,0 +1,56 @@
+name: Deploy CDK Project
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
+    
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        working-directory: ./frontend
+        run: npm install
+
+      - name: Build Distribution Files
+        working-directory: ./frontend
+        env:
+          VITE_GOOGLE_OAUTH_CLIENT_ID: 104079326466-rqglh7msot9iphnvv3qeodqs4j29i8ld.apps.googleusercontent.com
+          VITE_PAYMENTS_API_BASE_URL: https://x07sl7y4yg.execute-api.us-east-1.amazonaws.com/default
+        run: npm run build
+
+      - name: cdk deploy
+        working-directory: ./infrastructure
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'deploy'
+          cdk_stack: '*'
+          cdk_args: '--require-approval never'
+          actions_comment: false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'us-east-1'
