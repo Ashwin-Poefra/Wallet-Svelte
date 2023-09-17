@@ -13,9 +13,6 @@
 	import jwt_decode from 'jwt-decode';
 	import { onMount } from 'svelte';
 
-	// $: token = localStorage.getItem('access_token');
-	// $: console.log('token watch', token);
-
 	let isOpen = false;
 
 	onMount(() => {
