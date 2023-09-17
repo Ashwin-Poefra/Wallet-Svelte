@@ -37,7 +37,7 @@ jobs:
         working-directory: ./frontend
         env:
           VITE_GOOGLE_OAUTH_CLIENT_ID: 104079326466-rqglh7msot9iphnvv3qeodqs4j29i8ld.apps.googleusercontent.com
-          VITE_PAYMENTS_API_BASE_URL: https://x07sl7y4yg.execute-api.us-east-1.amazonaws.com/default
+          VITE_PAYMENTS_API_BASE_URL: ${{ secrets.PAYMENTS_API_BASE_URL }}
         run: npm run build
 
       - name: cdk deploy
