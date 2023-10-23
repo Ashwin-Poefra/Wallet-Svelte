@@ -27,12 +27,12 @@ export class StaticSite extends Construct {
 		super(parent, name);
 
 		const zone = route53.HostedZone.fromLookup(this, 'Zone', { domainName: props.domainName });
-		const siteDomain = props.subdomainName + '.' + props.domainName;
+		const siteDomain = `${props.subdomainName}.${props.domainName}`;
 		const cloudfrontOAI = new cloudfront.OriginAccessIdentity(this, 'cloudfront-OAI', {
 			comment: `OAI for ${name}`
 		});
 
-		new CfnOutput(this, 'Site', { value: 'https://' + siteDomain });
+		new CfnOutput(this, 'Site', { value: `https://${siteDomain}` });
 
 		// Content bucket
 		const siteBucket = new s3.Bucket(this, 'SiteBucket', {
@@ -85,8 +85,8 @@ export class StaticSite extends Construct {
 			errorResponses: [
 				{
 					httpStatus: 403,
-					responseHttpStatus: 403,
-					responsePagePath: '/error.html',
+					responseHttpStatus: 200,
+					responsePagePath: '/index.html',
 					ttl: Duration.minutes(30)
 				}
 			],

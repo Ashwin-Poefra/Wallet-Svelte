@@ -18,7 +18,7 @@
 			const response = await axios.get(`${PAYMENTS_API_BASE_URL}/wallet`, {
 				withCredentials: false,
 				headers: {
-					authorization: `Bearer ${localStorage.getItem('access_token')}`
+					Authorization: `Bearer ${localStorage.getItem('access_token')}`
 				}
 			});
 
